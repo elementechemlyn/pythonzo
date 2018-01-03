@@ -1,0 +1,9 @@
+monzosettings.json
+/scripts/
+/dist/
+/build/
+__pycache__
+.cache
+*.pyc
+*.egg-info
+

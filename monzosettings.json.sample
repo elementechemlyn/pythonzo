@@ -1,0 +1,7 @@
+{
+ "client_id": "",
+ "client_secret": "",
+ "token_url": "https://api.monzo.com/oauth2/token",
+ "api_url": "https://api.monzo.com/",
+ "redirect_url": "",
+}

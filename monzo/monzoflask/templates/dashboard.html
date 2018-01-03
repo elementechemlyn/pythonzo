@@ -1,0 +1,13 @@
+<html>
+  <body>
+    <ul id="accountlist">
+      {% for account in accounts %}
+      <li>
+	<a href="/account/{{ account.account_id }}">{{ account.description }}</a>
+	<span class="account_type">{{ account.account_type }}</span>
+	<span class="account_balance">{{ account.balance.total_balance }}</span>
+      </li>
+      {% endfor %}
+    </ul>      
+  </body>
+</html>

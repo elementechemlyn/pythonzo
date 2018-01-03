@@ -1,0 +1,14 @@
+<html>
+  <body>
+    <label id="balance">{{ account.balance.total_balance }}</label>
+    <ul id="transactionlist">
+      {% for transaction in transactions %}
+      <li>
+	<div class="created">{{ transaction.created }}</div>
+	<div class="description">{{ transaction.description }}</div>
+	<div class="amount">{{ transaction.amount }}</div>
+      </li>
+      {% endfor %}
+    </ul>      
+  </body>
+</html>
