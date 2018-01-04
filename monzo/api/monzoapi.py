@@ -6,20 +6,25 @@ import requests
 class MonzoApiException(Exception):
 
     def __init__(self,http_code,code,message):
+        self.http_code = http_code
         self.code = code
         self.message = message
         
 class MonzoApi(object):
 
-    def __init__(self,monzo_token=None):
-        if monzo_token==None:
-            monzo_token = monzotoken.MonzoToken()
-        self.token = monzo_token
-        self.access_token = self.token.access_token
+    def __init__(self,access_token):
+        self.access_token = access_token
         self.end_point = settings.settings["api_url"]
 
     def is_authenticated(self):
-        resp = self.whoami()
+        try:
+            resp = self.whoami()
+        except MonzoApiException as e:
+            print(e.code)
+            if e.http_code==401:
+                return False
+            else:
+                raise
         return resp.get('authenticated',False)
         
     def makeApiCall(self,path,body=None):

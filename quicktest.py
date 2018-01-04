@@ -4,10 +4,14 @@ import monzo.model.monzotransaction as monzotransaction
 import monzo.model.monzoaccount as monzoaccount
 import monzo.model.monzobalance as monzobalance
 
-api = monzoapi.MonzoApi()
+token = monzotoken.MonzoToken()
+api = monzoapi.MonzoApi(token.access_token)
 
 if not api.is_authenticated():
-    raise Exception("API Not authenticated!")
+    token.refresh()
+    api.access_token = token.access_token
+    if not api_is_authenticated():
+        raise Exception("API Not authenticated!")
 
 accounts = monzoaccount.MonzoAccount.listAccounts(api)
 for a in accounts:

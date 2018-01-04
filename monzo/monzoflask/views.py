@@ -18,16 +18,17 @@ from functools import wraps
 app.secret_key = "really stupid secret key"
 
 def check_token():
-    print("Checking Token")
     access_token = session.get("access_token",None)
-    if access_token:
-        print("Got token %s. Check validity" % (access_token,))
-        api = monzoapi.MonzoApi()
-        #Todo - if we get a failure here then we should try for a refresh token
+    api = monzoapi.MonzoApi(access_token)
+    if not api.is_authenticated():
+        token = monzotoken.MonzoToken()
+        api.access_token = token.access_token
+        if not api.is_authenticated():
+            token.refresh()
+        session["access_token"] = token.access_token        
         return api.is_authenticated()
     else:
-        print("No token found")
-        return False
+        return True
 
 def authenticate(f):
     @wraps(f)
@@ -44,7 +45,8 @@ def authenticate(f):
 @app.route('/')
 @authenticate
 def dashboard():
-    accounts = monzoaccount.MonzoAccount.listAccounts(monzoapi.MonzoApi())
+    access_token = session.get("access_token",None)
+    accounts = monzoaccount.MonzoAccount.listAccounts(monzoapi.MonzoApi(access_token))
     for account in accounts:
         account.readBalance()
     return render_template('dashboard.html',accounts=accounts)
@@ -52,7 +54,8 @@ def dashboard():
 @app.route('/account/<accountid>')
 @authenticate
 def show_account(accountid):
-    account = monzoaccount.MonzoAccount.getAccount(monzoapi.MonzoApi(),accountid)
+    access_token = session.get("access_token",None)
+    account = monzoaccount.MonzoAccount.getAccount(monzoapi.MonzoApi(access_token),accountid)
     return render_template('account.html',account=account,transactions=account.listTransactionsThisMonth())
 
 @app.route('/auth',methods=['POST', 'GET'])

@@ -3,7 +3,7 @@ from .. import settings
 import datetime
 
 """
-TODO - This won't work for multiplr users
+TODO - This won't work for multiple users
 Tokens need to be loaded for a specific user - not from settings.json
 """
 class MonzoToken(object):
@@ -44,8 +44,6 @@ class MonzoToken(object):
                 raise Exception("No Access Token")
         
     def refresh(self):
-        if not self.refresh_token:
-            return 0
         body = {
             "grant_type":"refresh_token",
             "client_id":settings.settings["client_id"],
