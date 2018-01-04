@@ -2,7 +2,8 @@
 
 Documentation to follow!
 
-python runserver.py
+* Copy monzosettings.json.sample to monzosettings.json and fill it in with client details
+* python runserver.py
 
 Starts a flask app to get an oauth token and store it in the monzosettings.json file. Hit http://localhost:5555/ to start the process.
 
